@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: company-service
+              uri: lb://task-company-service
+              predicates:
+                - Path=/api/company/**
+              filters:
+                - StripPrefix=1
+
+            - id: user-service
+              uri: lb://task-user-service
+              predicates:
+                - Path=/api/user/**
+              filters:
+                - StripPrefix=1
+
+  application:
+    name: api-gateway
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway,routes
+  endpoint:
+    health:
+      show-details: always
